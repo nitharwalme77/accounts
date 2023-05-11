@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+  
+  service-registry:
+    image: test/service-registry:latest
+    mem_limit: 700m
+    ports:
+      - "8761:8761"
+    networks:
+      - test-network
+  appmaster:
+    image: test/appmaster:latest
+    mem_limit: 700m
+    ports:
+      - "8500:8500"
+    networks:
+      - test-network
+  accounts:
+    image: test/accounts:latest
+    mem_limit: 700m
+    ports:
+      - "8080:8080"
+    networks:
+      - test-network
+    
+  loans:
+    image: test/loans:latest
+    mem_limit: 700m
+    ports:
+      - "8090:8090"
+    networks:
+      - test-network
+    
+  cards:
+    image: test/cards:latest
+    mem_limit: 700m
+    ports:
+      - "9000:9000"
+    networks:
+      - test-network
+    
+networks:
+  test-network:
