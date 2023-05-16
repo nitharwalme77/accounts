@@ -1,6 +1,13 @@
 version: "3.8"
 
 services:
+  zipkin:
+    image: openzipkin/zipkin
+    mem_limit: 700m
+    ports:
+      - "9411:9411"
+    networks:
+     - eazybank
 
   configserver:
     image: nitharwalme7/configserver:latest
@@ -9,6 +16,12 @@ services:
       - "8071:8071"
     networks:
      - eazybank
+    depends_on:
+      - zipkin
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      # SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
    
   eurekaserver:
     image: nitharwalme7/eurekaserver:latest
@@ -28,6 +41,8 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: default
       SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+            # SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
       
   accounts:
     image: nitharwalme7/accounts:latest
@@ -49,6 +64,8 @@ services:
       SPRING_PROFILES_ACTIVE: default
       SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+            # SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
 
   accounts1:
     image: nitharwalme7/accounts:latest
@@ -69,7 +86,9 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: default
       SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/    
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/   
+            # SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans 
   
   loans:
     image: nitharwalme7/loans:latest
@@ -91,6 +110,8 @@ services:
       SPRING_PROFILES_ACTIVE: default
       SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+            # SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
     
   cards:
     image: nitharwalme7/cards:latest
@@ -112,6 +133,8 @@ services:
       SPRING_PROFILES_ACTIVE: default
       SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+            # SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
 
   gatewayserver:
     image: eazybytes/gatewayserver:latest
@@ -136,6 +159,8 @@ services:
       SPRING_PROFILES_ACTIVE: default
       SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+            # SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
       
 networks:
   eazybank:
