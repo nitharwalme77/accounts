@@ -37,7 +37,7 @@ public class AccountsController {
 
     @PostMapping("/myAccount")
     public Accounts getAccountDetails(@RequestBody Customer customer) {
-
+        logger.info("getAccountDetails() method started");
         Accounts accounts = accountsRepository.findByCustomerId(customer.getCustomerId());
         if (accounts != null) {
             return accounts;
